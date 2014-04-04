@@ -1,0 +1,34 @@
+<% @page_heading = _('Database migration') %>
+<% @page_heading_class = 'icon-settings' %>
+
+<div class='alert alert-message warning'>
+  <h3><%= _("Information")%></h3>
+  <p>
+    <strong><%= _("Current database version")%>:</strong>
+    <%= @current_version %>
+  </p>
+  <% unless @needed_migrations.blank? %>
+  <p>
+    <strong><%= _("Migrations")%>:</strong>
+    <%= _("There are %d migration(s) pending.", @needed_migrations.count) %>
+  </p>
+  <p><%= _("Needed migrations")%>:</p>
+  <ul>
+    <% for migration in @needed_migrations %>
+    <li><%= migration.name %></li>
+    <% end %>
+  </ul>
+  <% end %>
+  <div class='alert-actions'>
+    <%= form_tag :action => 'migrate' do %>
+    <% if @needed_migrations.blank? %>
+    <div class='info'>
+      <p><strong><%= _("You are up to date!")%></strong></p>
+    </div>
+    <% else %>
+    <%= save(_("Update database now")) %>
+    <small><%= _("may take a moment")%></small>
+    <% end %>
+    <% end %>
+  </div>
+</div>

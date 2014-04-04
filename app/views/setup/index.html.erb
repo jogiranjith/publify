@@ -1,0 +1,8 @@
+<%= form_tag :action=> 'index' do %>
+  <div class='alert'>
+    <small><%= _("Welcome to your %s blog setup. Just fill in your blog title and your email, and Publify will take care of everything else", link_to("Publify", 'http://publify.co'))%></small>
+  </div>
+  <%= text_field(:setting, :blog_name, { :class=> 'input-block-level', :placeholder => _("Blog name")})%>
+  <%= text_field(:setting, :email, { :class=> 'input-block-level', :placeholder => _("Your email")})%>
+  <input type="submit" id="submit" class='btn btn-info pull-right' value="<%= _('Save')%>" />
+<% end %>

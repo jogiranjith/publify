@@ -1,0 +1,17 @@
+<% @page_heading = _("Welcome back, %s!", current_user.name ) %>
+<% @page_heading_class = 'icon-dashboard'%>
+
+<%= render "overview" %>
+
+<div>
+  <div class='span6'>
+    <%= render "welcome" %>
+    <%= render "comments" %>
+  </div>
+
+  <div class='span6'>
+    <%= render "drafts" %>
+    <%= render "inbound" %>
+  </div>
+  
+</div>

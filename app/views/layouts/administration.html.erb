@@ -1,0 +1,95 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta http-equiv="Content-type" content="text/html; charset=utf-8" />
+  <title><%= this_blog.blog_name %> – <%= controller.controller_name %></title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="imagetoolbar" content="no" />
+  <%= stylesheet_link_tag "growler", "bootstrap", "administration_structure", "lightbox" %>
+  <%= javascript_include_tag "prototype", "effects", "builder", "dragdrop", "controls", "publify", "lightbox", "growler", "publify_carousel", "administration" %>
+  <%= calendar_date_select_includes %>
+  <style type="text/css">
+    #carousel-content .slide { width: <%= this_blog.image_thumb_size %>; }
+    @font-face {
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: 400;
+      src: local('Open Sans'), local('OpenSans'), url(<%= File.join(this_blog.base_url, 'stylesheets', 'fonts', 'open-sans.woff') %>) format('woff');
+    }
+    @font-face {
+      font-family: 'Open Sans';
+      font-style: normal;
+      font-weight: 700;
+      src: local('Open Sans Bold'), local('OpenSans-Bold'), url(<%= File.join(this_blog.base_url, 'stylesheets', 'fonts', 'open-sans-bold.woff') %>) format('woff');
+    }
+  </style>
+
+</head>
+<body>
+  <div class='navbar navbar-fixed-top navbar-inverse'>
+    <div class='navbar-inner'>
+      <div class='container-fluid'>
+        <%= link_to this_blog.blog_name, this_blog.base_url, { :class => 'brand' } %>
+        <ul class='nav pull-right'>
+          <li class='divider-vertical'></li>
+          <li class="dropdown" onmouseover='$("help_menu").style.display = "block"' onmouseout='$("help_menu").style.display = "none"'>
+            <a class="dropdown-toggle" href="#"><%= _("Help")%></a>
+            <ul class="dropdown-menu" id="help_menu" style="display: none;">
+              <li><%= link_to _("Documentation"), "https://github.com/fdv/publify/wiki" %></li>
+              <li><%= link_to _("Report a bug"), "https://github.com/fdv/publify/issues" %></li>
+              <li><%= link_to _("In page plugins"), "https://github.com/fdv/publify/wiki/In-Page-Plugins" %></li>
+              <li><%= link_to _("Sidebar plugins"), "https://github.com/fdv/publify/wiki/Sidebar-plugins" %></li>
+            </ul>
+          </li>
+          <li class='dropdown' onmouseover='$("user_menu").style.display = "block"' onmouseout='$("user_menu").style.display = "none"'>
+            <a class="dropdown-toggle" href="#"><%= _("Logged in as %s", current_user.display_name)%></a>
+            <ul class="dropdown-menu" id="user_menu" style='display: none'>
+              <li><%= link_to(_("New Article"), {:controller => 'content', :action => 'new'}) %></li>
+              <li><%= link_to _("Profile"), { :controller => 'admin/profiles', :action => 'index'}  %></li>
+              <li><%= link_to _("%s &raquo;", "Log out").html_safe, {:controller => "/accounts", :action=>"logout"} %></li>
+            </ul>
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+  <div id='main' class='container-fluid'>
+    <div class='row-fluid'>
+      <div class='span2'>
+        <div class='well' style='padding: 28px 0'>
+          <ul class='nav nav-list'>
+            <li class='nav-header'><i class='icon icon-home'></i>
+              <%= _("Home") %>
+            </li>
+            <li class='<%= "active" if controller.controller_name == 'dashboard' %>'>
+              <%= link_to _('Dashboard'), {:controller => 'admin/dashboard'} %>              
+            </li>
+            <li class="divider"></li>
+            <% for pm in current_user.project_modules %>
+            <li class="nav-header">
+              <i class='icon icon-<%= pm.name %>'></i>
+              <%= _(pm.menus.first.name) %>
+            </li>            
+              <%= subtabs_for(pm.name.to_sym)%>
+              <li class="divider"></li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+      <div class='span10' style="padding-top: 20px">
+          <%= render_the_flash %>
+          <%= show_page_heading %>
+          <%= yield  %>
+      </div>
+      
+    </div>
+  </div>
+
+  <footer class='clearfix'>
+    <div class='span12'>
+      <%= link_to(this_blog.blog_name, this_blog.base_url) %> <%= _("is proudly powered by")%> Publify <%=h PUBLIFY_VERSION %> – Icons courtesy of <a href='http://glyphicons.com/'>Glyphicons</a>
+    </div>
+  </footer>
+</body>
+</html>

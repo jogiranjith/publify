@@ -1,0 +1,40 @@
+<div class="post">
+  <h2><%= @author.nickname %></h2>
+  <%= display_user_avatar(@author, 'thumb', 'alignright') %>
+  
+  <%= author_description @author %>
+
+  <h2><%= _("Contact information") %></h2>
+  <ul>
+    <%= display_profile_item @author.url, _("Web site:") %>
+    <%= display_profile_item @author.msn, _("MSN:") %>
+    <%= display_profile_item @author.yahoo, _("Yahoo:") %>
+    <%= display_profile_item @author.jabber, _("Jabber:") %>
+    <%= display_profile_item @author.aim, _("AIM:") %>
+    <%= display_profile_item @author.twitter, _("Twitter:") %>
+  </ul>
+</div>
+
+<% if @articles.empty? -%>
+<div class="post">
+<p><%= _("This author has not published any article yet")%>...</p>
+</div>
+<% else
+     currentmonth = 0
+     currentyear = 0
+     for article in @articles
+       if (article.published_at.month != currentmonth || article.published_at.year != currentyear)
+         currentmonth = article.published_at.month
+         currentyear = article.published_at.year -%>
+          <h3 class="archivemonth"><%= _(Date::MONTHNAMES[article.published_at.month]) %> <%= article.published_at.year %></h3>
+           <% end -%>
+  <div class="archivepost">
+  <%= article.published_at.mday %> -
+  <%= link_to_permalink(article,h(article.title)) %>
+  <% if !article.categories.empty? %> <%= _("posted in") %>
+  <%= article.categories.collect {|c| link_to_permalink c,c.name }.join(", ") -%>
+  <% end -%>
+ </div>
+<% end %>
+<%= paginate @articles, :next_label => "#{_("Next page")} &raquo;", :previous_label => "&laquo; #{_('Previous page')}" %>
+<%  end -%>

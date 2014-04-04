@@ -1,0 +1,76 @@
+# Publify 7.1
+
+Since Publify 7.0 release 8 days ago, a few bugs have been fixed:
+
+* #246: added a migration to fix empty permalinks on article and empty guid on notes when they exist (may have been introduced by an old historical bug and they now make notes crash).
+* #247: fixed a bug that made the application crash when saving a note would fail for any reason.
+* #248: fixed a bug introduced by some heavy code cleaning that made feedback/article/xxx to crash.
+* #252: fixed an old bug making comment creation from the admin crashing.
+
+**********************************************************************
+
+# Publify 7.0
+
+Since Publify 7.0 beta1, changes have mostly been about fixing bugs.
+
+* #228: Changelog is meaningless.
+* #237: Missing or incorrect labels on many forms.
+* #239: Dashboard: marking a comment as spam should load the next non spammy comment.
+* #240: On authors pages, links are rails escaped.
+
+**********************************************************************
+
+# Publify 7.0 beta 1
+
+## New features and enhancement
+
+### Notes and POSSE to Twitter
+
+The most important feature of this new release is the addition of notes. Notes are (more or less) short statuses that were not long enough to deserve a full blog post. Notes come with their own feed you can find in /notes/ and can optionnaly be displayed on your Publify main feed. Notes have auto discovery for twitter account (@publify), hashtags (#publify) and links. 
+
+Notes can optionnaly be pushed to Twitter, with a perma short link back to the original content. They handle Twitter in reply context, so if you reply to a tweet, the original message will be displayed with a proper link just above yours. If the note and perma short link are short enough to fit into 140 characters, the link back is dislayed under the (foo.com something) form. Otherwise, the tweet is sent with a full link to the content.
+
+### Visual editor and self dogfooding
+
+The visual editor and file manager were completely removed in the name of self dogfooding (issue #224 and #164). This was a hard to take decision, as we understand you may be reluctant to use the Markdown, Textile or plain HTML syntaxes. The reason why we finally removed it was simple: none of us would use it, so it was poorly implemented and tested and, for many points, broken.
+
+### Other features
+
+* ##198: 404 errors are now handled by the themes instead of the application settings (change bd427c892ed827e26228a34d33245a33492af260).
+* #219: Default theme now supports hentry Microformat (change 2671fd771734a7226cf1269bd440853e3ab337e2)
+* #224: Visual editor was removed. It may come back under another form later (change 8058ec52cf33cbf0521414fa6fe5be1f7e52b73e).
+* Editor toolbar behaves according to the selected text filter (change c802f0a88620170e79e164e1c91cd8c07312b5bd).
+* Old, deprecated converters from Wordpress and Dotclear were removed (change 8f29f35645080f7f996ae031fd6898c3903d0f9d).
+* A new sidebar plugin displays the most popular posts.
+* A new sidebar plugin displays the 5 latest published notes.
+* URL shortener can now use a ustom domain (change 31573fa30be188951db6178fe7706acd3a0c316b)
+* A little revamping of the login / register / confirm / lost password / setup pages (change 1257ce2bf68718f32e53782d12cd88a99b594458, 0bdfa854de22016f6aae3f27c30b44b865cfb380).
+* Themes now can embed their own gems (change 373cfb8da90a47325dc647318485c59b1f9c5f03).
+* Admin layout now behaves nicely with mobile devices (change 56cf701a19175ba7fe2584fb716541a9e57a804a).
+* Add very basic support for OpenGraph data (changes e7a60b19f2e2029700b04acc8e8c514795a5386a, changes 62406703b2d4a7b645c2604f38b577bf1217f3fb). By Diego Elio Pettenò.
+* Excerpts: pre-process the excerpts with the filter (change a636e23d4e0cfbe97ed3d8584cf01a0192b475fa). By Diego Elio Pettenò.
+* Added dynamic_form error_messages_for user created on signup page. (change 01f8ade7ff9d680fefc9a3577ae060013d5a7379). By Kyle Fazzari.
+* Upgrade to Rails 3.2.13.
+* Feed cleaning: don't append the subtitle to the page title (change 6bf9a5b5f372ab3cfb9ce7589b2a97021cdf5496). By Diego Elio Pettenò.
+
+Thank you to all the contributors who helped improving the UI by pushing wording improvement or contributing to translation effort (Soon Van, Raman Sinha, mariozig, Geraud Puechaldou)
+
+## Squashed bugs
+
+* #59: Articles were randomly rendered as password protected.
+* #65: Saving articles may make them lose tags.
+* #97 Dashboard crashing when fetching some RSS from Google alerts.
+* #150: Theme crashing when displaying comments count
+* #161, #162: Gemfile processing would crash because of YAML not being availale (change f3765d63b5207e09f27ac36e7b044d2ab5bc3a15).
+* #163: Iconv gem was missing in Gemfile.
+* #174: Articles using excerpt did not have the "continue reading" link (change b7839d232c3397b9a277b8353f4f4c8d5e067dd7).
+* #179: Fixes article deletion in admin. Solves 
+* Avoid resetting tags when posts are published via trigger (change f1e44c8d91aa40fa4df149f59599d1d957d3c5f2). By Diego Elio Pettenò.
+* Sqlite3 making Article.bestof crash (change 56ea99a34205f7d79a7f7568c9bfbe1697eb59cf).
+* "Mark checked item as (Ham|Spam)" do what they're supposed to do (change 79c44a8516d69078f4c049c7517f2fb5fc5e36b4). By Diego Elio Pettenò.
+* Incorrect sprintf format in Norwegian translation in users/index.html.erb (change 40b823b3b2a9c5b29b1607c7db82dce4e16b91f1). By Tor Helland.
+* Article text filters would e reset on edit (change 1e820efb6b3e8e4a840734baca841e40ada10872).
+* Gravatar generated HTML did not validate correctly (change 05e1372c7ed2628fc49538f75d6d332b84847c21).
+* Incorrect migration versioning scheme (change 80ca76c3802a52447330afe9f1241d3baef762c5, change 77a0039dd7b86d7ceb1608d048e6880db7e98622, change 7fc1bc07eb0d9de0886ba0433c2a175ad6da9248, change 318aec2ff0616e4f8cacf37b0839ad9aecf1b46c and change 0ffdae86c2bad405c00ba94b646b22088163c590). By David Ryder.
+* The search plugin didn't echo the form_tag, which was deprecated in Rails 3.0 and unsupported in Rails 3.1. This fixes that. (change 4ff48a829784813cde0689a7bd10648b2521dd1f)
+* Inbound link widget on the dashboard did not work (change 0d64ba929b6fdeccf7b1fb414a4f4cddf0de2d4e).
